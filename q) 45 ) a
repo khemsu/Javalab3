@@ -1,0 +1,82 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
+package labworkpart4;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import jakarta.servlet.http.*;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+
+/**
+ *
+ * @author sundippahimlimbu
+ */
+public class SessionServlet extends HttpServlet {
+    public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+        
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+        
+        // HTML Form for session operations
+        out.println("<h2>Session Handling Demo</h2>");
+        out.println("<form method='post'>");
+        out.println("Enter Username: <input type='text' name='username'><br><br>");
+        out.println("<input type='submit' name='action' value='Create Session'>");
+        out.println("<input type='submit' name='action' value='Read Session'>");
+        out.println("<input type='submit' name='action' value='Destroy Session'>");
+        out.println("</form>");
+    }
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        String action = request.getParameter("action");
+        HttpSession session = request.getSession();
+
+        // Handle Create Session
+        if ("Create Session".equals(action)) {
+            String username = request.getParameter("username");
+
+            if (username != null && !username.trim().isEmpty()) {
+                session.setAttribute("username", username);
+                out.println("<h3>Session Created Successfully!</h3>");
+                out.println("<p>Stored Username: " + username + "</p>");
+            } else {
+                out.println("<h3>Please enter a valid username!</h3>");
+            }
+        }
+
+        // Handle Read Session
+        else if ("Read Session".equals(action)) {
+            String username = (String) session.getAttribute("username");
+            if (username != null) {
+                out.println("<h3>Session Data Found!</h3>");
+                out.println("<p>Username: " + username + "</p>");
+                out.println("<p>Session ID: " + session.getId() + "</p>");
+            } else {
+                out.println("<h3>No Session Data Found!</h3>");
+            }
+        }
+
+        // Handle Destroy Session
+        else if ("Destroy Session".equals(action)) {
+            session.invalidate();
+            out.println("<h3>Session Destroyed Successfully!</h3>");
+        }
+
+        out.println("<br><br><a href='SessionServlet'>Go Back</a>");
+    }
+
+}
+
+
+
