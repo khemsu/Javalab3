@@ -1,0 +1,72 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package labworkpart3;
+
+import java.sql.*;
+import java.util.Scanner;
+
+public class InsertRecords {
+    public static void main(String[] args) {
+        // Database connection details
+        String url = "jdbc:mysql://localhost:3306/java"; // Change DB name
+        String user = "root";                              // Change username
+        String password = "";                  // Change password
+
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            // 1. Load JDBC Driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // 2. Establish Connection
+            Connection con = DriverManager.getConnection(url, user, password);
+
+            // 3. Prepare SQL Insert Query
+            String sql = "INSERT INTO result (roll_no, course_name, marks_obtained) VALUES (?, ?, ?)";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            String choice;
+
+            do {
+                // 4. Take input from user
+                System.out.print("Enter Roll Number: ");
+                int rollNo = sc.nextInt();
+                sc.nextLine(); // consume newline
+
+                System.out.print("Enter Course Name: ");
+                String course = sc.nextLine();
+
+                System.out.print("Enter Marks Obtained: ");
+                int marks = sc.nextInt();
+                sc.nextLine(); // consume newline
+
+                // 5. Set values in PreparedStatement
+                pstmt.setInt(1, rollNo);
+                pstmt.setString(2, course);
+                pstmt.setInt(3, marks);
+
+                // 6. Execute Insert
+                int rows = pstmt.executeUpdate();
+                if (rows > 0) {
+                    System.out.println("Record inserted successfully!");
+                }
+
+                // 7. Ask if user wants to continue
+                System.out.print("Do you want to insert another record? (yes/no): ");
+                choice = sc.nextLine().trim().toLowerCase();
+
+            } while (choice.equals("yes"));
+
+            // 8. Close resources
+            pstmt.close();
+            con.close();
+            sc.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
