@@ -1,0 +1,58 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package labworkpart3;
+
+import java.sql.*;
+import java.util.Scanner;
+
+public class FetchResultByRollNo {
+    public static void main(String[] args) {
+        // Database connection details
+        String url = "jdbc:mysql://localhost:3306/java"; // Change DB name
+        String user = "root";                              // Change username
+        String password = "";                  // Change password
+
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            // 1. Load JDBC Driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // 2. Establish Connection
+            Connection con = DriverManager.getConnection(url, user, password);
+
+            // 3. Prepare SQL Query
+            String sql = "SELECT roll_no, course_name, marks_obtained FROM result WHERE roll_no = ?";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            // 4. Take input from user
+            System.out.print("Enter roll number: ");
+            int rollNo = sc.nextInt();
+
+            pstmt.setInt(1, rollNo);
+
+            // 5. Execute Query
+            ResultSet rs = pstmt.executeQuery();
+
+            // 6. Display Result
+            if (rs.next()) {
+                System.out.println("Roll No: " + rs.getInt("roll_no"));
+                System.out.println("Course Name: " + rs.getString("course_name"));
+                System.out.println("Marks Obtained: " + rs.getInt("marks_obtained"));
+            } else {
+                System.out.println("No record found for Roll No: " + rollNo);
+            }
+
+            // 7. Close resources
+            rs.close();
+            pstmt.close();
+            con.close();
+            sc.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
