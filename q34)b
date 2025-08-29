@@ -1,0 +1,54 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package labworkpart3;
+
+import java.sql.*;
+
+public class UpdatableResultSetDemo {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/java";
+        String user = "root";
+        String password = "";
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection(url, user, password);
+
+            // Create updatable statement
+            Statement stmt = con.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_UPDATABLE
+            );
+
+            ResultSet rs = stmt.executeQuery("SELECT * FROM result");
+
+            // Insert new row
+            rs.moveToInsertRow();
+            rs.updateInt("roll_no", 6);
+            rs.updateString("course_name", "Datas Warehousing and Mining");
+            rs.updateInt("marks_obtained", 80);
+            rs.insertRow();
+
+            System.out.println("Inserted new row successfully.");
+
+            // Update existing row (roll_no=2)
+            rs.beforeFirst();
+            while(rs.next()) {
+                if(rs.getInt("roll_no") == 2) {
+                    rs.updateInt("marks_obtained", 95);
+                    rs.updateRow();
+                    System.out.println("Updated roll_no 2 successfully.");
+                }
+            }
+
+            rs.close();
+            stmt.close();
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
