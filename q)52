@@ -1,0 +1,100 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package labworkpart4;
+
+import javafx.application.Application;
+import javafx.geometry.Insets;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
+import javafx.scene.layout.*;
+import javafx.stage.FileChooser;
+import javafx.stage.Stage;
+
+import java.io.File;
+
+public class ControlsDemo extends Application {
+
+    @Override
+    public void start(Stage primaryStage) {
+        primaryStage.setTitle("JavaFX Controls Demo");
+
+        // VBox as main container
+        VBox vbox = new VBox(10);
+        vbox.setPadding(new Insets(15));
+
+        // 1. Label
+        Label label = new Label("Enter your name:");
+
+        // 2. TextField
+        TextField textField = new TextField();
+        textField.setPromptText("Your name here");
+        textField.setTooltip(new Tooltip("Type your full name"));
+
+        // 3. Button
+        Button submitBtn = new Button("Submit");
+        submitBtn.setOnAction(e -> {
+            String name = textField.getText();
+            Alert alert = new Alert(Alert.AlertType.INFORMATION, "Hello, " + name + "!");
+            alert.showAndWait();
+        });
+
+        // 4. RadioButtons
+        RadioButton maleBtn = new RadioButton("Male");
+        RadioButton femaleBtn = new RadioButton("Female");
+        ToggleGroup genderGroup = new ToggleGroup();
+        maleBtn.setToggleGroup(genderGroup);
+        femaleBtn.setToggleGroup(genderGroup);
+
+        HBox radioBox = new HBox(10, maleBtn, femaleBtn);
+
+        // 5. CheckBox
+        CheckBox subscribeChk = new CheckBox("Subscribe to newsletter");
+
+        // 6. Hyperlink
+        Hyperlink link = new Hyperlink("Visit OpenAI");
+        link.setOnAction(e -> getHostServices().showDocument("https://www.openai.com"));
+
+        // 7. Menu
+        Menu fileMenu = new Menu("File");
+        MenuItem newItem = new MenuItem("New");
+        MenuItem exitItem = new MenuItem("Exit");
+        exitItem.setOnAction(e -> primaryStage.close());
+        fileMenu.getItems().addAll(newItem, exitItem);
+        MenuBar menuBar = new MenuBar(fileMenu);
+
+        // 8. FileChooser
+        Button chooseFileBtn = new Button("Choose File");
+        Label fileLabel = new Label("No file selected");
+        chooseFileBtn.setOnAction(e -> {
+            FileChooser fileChooser = new FileChooser();
+            File file = fileChooser.showOpenDialog(primaryStage);
+            if (file != null) {
+                fileLabel.setText("Selected: " + file.getAbsolutePath());
+            }
+        });
+
+        // Add all controls to VBox
+        vbox.getChildren().addAll(
+                menuBar,
+                label,
+                textField,
+                submitBtn,
+                new Label("Select Gender:"),
+                radioBox,
+                subscribeChk,
+                link,
+                chooseFileBtn,
+                fileLabel
+        );
+
+        Scene scene = new Scene(vbox, 400, 450);
+        primaryStage.setScene(scene);
+        primaryStage.show();
+    }
+
+    public static void main(String[] args) {
+        launch(args);
+    }
+}
