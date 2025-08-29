@@ -1,0 +1,27 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package rmiexample;
+
+import java.rmi.Naming;
+import java.rmi.registry.LocateRegistry;
+
+public class Server {
+    public static void main(String[] args) {
+        try {
+            // Start RMI registry programmatically at port 1099
+            LocateRegistry.createRegistry(1099);
+
+            // Create instance of implementation
+            SumImpl obj = new SumImpl();
+
+            // Bind the remote object in the registry
+            Naming.rebind("SumService", obj);
+
+            System.out.println("Server is ready...");
+        } catch (Exception e) {
+            System.out.println("Server Exception: " + e);
+        }
+    }
+}
