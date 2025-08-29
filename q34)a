@@ -1,0 +1,46 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package labworkpart3;
+
+import java.sql.*;
+
+public class ScrollableResultSetDemo {
+    public static void main(String[] args) {
+        String url = "jdbc:mysql://localhost:3306/java"; // Change DB name
+        String user = "root";                              // Change username
+        String password = "";                  // Change password
+
+        try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
+            Connection con = DriverManager.getConnection(url, user, password);
+
+            // Create scrollable statement
+            Statement stmt = con.createStatement(
+                    ResultSet.TYPE_SCROLL_INSENSITIVE,
+                    ResultSet.CONCUR_READ_ONLY
+            );
+
+            ResultSet rs = stmt.executeQuery("SELECT * FROM result");
+
+            System.out.println("Moving forward:");
+            while (rs.next()) {
+                System.out.println(rs.getInt("roll_no") + "\t" + rs.getString("course_name") + "\t" + rs.getInt("marks_obtained"));
+            }
+
+            System.out.println("\nMoving backward:");
+            while (rs.previous()) {
+                System.out.println(rs.getInt("roll_no") + "\t" + rs.getString("course_name") + "\t" + rs.getInt("marks_obtained"));
+            }
+
+            rs.close();
+            stmt.close();
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
