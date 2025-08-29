@@ -1,0 +1,51 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package labworkpart3;
+
+import java.sql.*;
+
+public class ReadTableData {
+    public static void main(String[] args) {
+        // JDBC URL, username, password
+        String url = "jdbc:mysql://localhost:3306/java";  // Change db name
+        String user = "root";                               // Change username
+        String password = "";                   // Change password
+
+        try {
+            // 1. Load JDBC Driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // 2. Establish Connection
+            Connection con = DriverManager.getConnection(url, user, password);
+
+            // 3. Create Statement
+            Statement stmt = con.createStatement();
+
+            // 4. Execute Query (change table name, e.g., 'students')
+            String query = "SELECT * FROM MOVIE";
+            ResultSet rs = stmt.executeQuery(query);
+
+            // 5. Get metadata for column count
+            ResultSetMetaData rsmd = rs.getMetaData();
+            int columnCount = rsmd.getColumnCount();
+
+            // 6. Display table data
+            while (rs.next()) {
+                for (int i = 1; i <= columnCount; i++) {
+                    System.out.print(rs.getString(i) + "\t");
+                }
+                System.out.println();
+            }
+
+            // 7. Close resources
+            rs.close();
+            stmt.close();
+            con.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
