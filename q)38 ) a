@@ -1,0 +1,27 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package labworkpart4;
+
+import java.net.*;
+
+public class URLDemo {
+    public static void main(String[] args) {
+        try {
+            // 1. Simple URL with full address
+            URL url1 = new URL("https://www.sundiplimbu.com:8080/index.html?user=sundip#section1");
+            System.out.println("URL1: " + url1);
+
+            // 2. URL with protocol, host, and file
+            URL url2 = new URL("https", "www.google.com", "/search?q=java");
+            System.out.println("URL2: " + url2);
+
+     
+
+        } catch (MalformedURLException e) {
+            System.out.println("Invalid URL: " + e.getMessage());
+        }
+    }
+}
+
