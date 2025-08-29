@@ -1,0 +1,93 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
+ */
+package labworkpart4;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import jakarta.servlet.ServletException;
+import jakarta.servlet.http.HttpServlet;
+import jakarta.servlet.http.HttpServletRequest;
+import jakarta.servlet.http.HttpServletResponse;
+import jakarta.servlet.http.Cookie;
+
+/**
+ *
+ * @author sundippahimlimbu
+ */
+public class CookieDemoServlet extends HttpServlet {
+     public void doGet(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        // HTML Form for cookie operations
+        out.println("<h2>Cookie Handling Demo</h2>");
+        out.println("<form method='post'>");
+        out.println("Enter Username: <input type='text' name='username'><br><br>");
+        out.println("<input type='submit' name='action' value='Create Cookie'>");
+        out.println("<input type='submit' name='action' value='Read Cookie'>");
+        out.println("<input type='submit' name='action' value='Delete Cookie'>");
+        out.println("</form>");
+    }
+
+    public void doPost(HttpServletRequest request, HttpServletResponse response)
+            throws ServletException, IOException {
+
+        response.setContentType("text/html");
+        PrintWriter out = response.getWriter();
+
+        String action = request.getParameter("action");
+
+        // Handle Create Cookie
+        if ("Create Cookie".equals(action)) {
+            String username = request.getParameter("username");
+
+            if (username != null && !username.trim().isEmpty()) {
+                Cookie cookie = new Cookie("username", username);
+                cookie.setMaxAge(60 * 60); // Valid for 1 hour
+                response.addCookie(cookie);
+
+                out.println("<h3>Cookie Created Successfully!</h3>");
+                out.println("<p>Stored Username: " + username + "</p>");
+            } else {
+                out.println("<h3>Please enter a valid username!</h3>");
+            }
+        }
+
+        // Handle Read Cookie
+        else if ("Read Cookie".equals(action)) {
+            Cookie[] cookies = request.getCookies();
+            boolean found = false;
+
+            if (cookies != null) {
+                for (Cookie c : cookies) {
+                    if (c.getName().equals("username")) {
+                        out.println("<h3>Cookie Data Found!</h3>");
+                        out.println("<p>Username: " + c.getValue() + "</p>");
+                        found = true;
+                        break;
+                    }
+                }
+            }
+
+            if (!found) {
+                out.println("<h3>No Cookie Found!</h3>");
+            }
+        }
+
+        // Handle Delete Cookie
+        else if ("Delete Cookie".equals(action)) {
+            Cookie cookie = new Cookie("username", "");
+            cookie.setMaxAge(0); // Expire immediately
+            response.addCookie(cookie);
+            out.println("<h3>Cookie Deleted Successfully!</h3>");
+        }
+
+        out.println("<br><br><a href='CookieDemoServlet'>Go Back</a>");
+    }
+
+
+}
