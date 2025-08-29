@@ -1,0 +1,55 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package labworkpart4;
+
+
+import java.io.*;
+import java.net.*;
+
+public class SimmpleServer {
+    public static void main(String[] args) {
+        int port = 5001; // Server will run on port 5000
+        try (ServerSocket serverSocket = new ServerSocket(port)) {
+            System.out.println("Server started. Waiting for client...");
+
+            Socket socket = serverSocket.accept();
+            System.out.println("Client connected!");
+
+            // Input and output streams
+            BufferedReader in = new BufferedReader(new InputStreamReader(socket.getInputStream()));
+            PrintWriter out = new PrintWriter(socket.getOutputStream(), true);
+
+            // For server user to send message
+            BufferedReader serverInput = new BufferedReader(new InputStreamReader(System.in));
+
+            String clientMessage, serverMessage;
+            while (true) {
+                // Receive message from client
+                clientMessage = in.readLine();
+                if (clientMessage == null || clientMessage.equalsIgnoreCase("exit")) {
+                    System.out.println("Client disconnected.");
+                    break;
+                }
+                System.out.println("Client: " + clientMessage);
+
+                // Send message to client
+                System.out.print("Server: ");
+                serverMessage = serverInput.readLine();
+                out.println(serverMessage);
+
+                if (serverMessage.equalsIgnoreCase("exit")) {
+                    System.out.println("Server closing connection.");
+                    break;
+                }
+            }
+
+            socket.close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+    }
+}
+
+
