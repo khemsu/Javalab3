@@ -1,0 +1,58 @@
+/*
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
+ * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
+ */
+package labworkpart3;
+
+import java.sql.*;
+import java.util.Scanner;
+
+public class InsertIntoTable {
+    public static void main(String[] args) {
+        // Database connection details
+        String url = "jdbc:mysql://localhost:3306/java"; // Change 'testdb' to your DB name
+        String user = "root";                              // Change username
+        String password = "";                  // Change password
+
+        Scanner sc = new Scanner(System.in);
+
+        try {
+            // 1. Load JDBC Driver
+            Class.forName("com.mysql.cj.jdbc.Driver");
+
+            // 2. Establish Connection
+            Connection con = DriverManager.getConnection(url, user, password);
+
+            // 3. SQL Insert Query (students table with id, name, age)
+            String sql = "INSERT INTO student (name, age) VALUES (?, ?)";
+            PreparedStatement pstmt = con.prepareStatement(sql);
+
+            // 4. Take input from user
+            System.out.print("Enter student name: ");
+            String name = sc.nextLine();
+
+            System.out.print("Enter student age: ");
+            int age = sc.nextInt();
+
+            // 5. Set values to query
+            pstmt.setString(1, name);
+            pstmt.setInt(2, age);
+
+            // 6. Execute Update
+            int rows = pstmt.executeUpdate();
+
+            if (rows > 0) {
+                System.out.println("Record inserted successfully!");
+            }
+
+            // 7. Close resources
+            pstmt.close();
+            con.close();
+            sc.close();
+
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
+    }
+}
+
